@@ -1,39 +1,39 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-contract Enum {
-    // Enum representing different possible shipping states
-    enum Status {
-        Pending,
-        Shipped,
-        Accepted,
-        Rejected,
-        Canceled
+contract TodoList {
+    // Declare a struct which groups together two data types
+    struct TodoItem {
+        string text;
+        bool completed;
     }
 
-    // Declare a variable of the type Status
-    // This can only contain one of the predefined values
-    Status public status;
+    // Create an array of TodoItem structs
+    TodoItem[] public todos;
 
-    // Since enums are internally represented by uints
-    // This function will always return a uint
-    // Pending = 0
-    // Shipped = 1
-    // Accepted = 2
-    // Rejected = 3
-    // Canceled = 4
-    // Value higher than 4 cannot be returned
-    function get() public view returns (Status) {
-        return status;
+    function createTodo(string memory _text) public {
+        // There are multiple ways to initialize structs
+
+        // Method 1 - Call it like a function
+        todos.push(TodoItem(_text, false));
+
+        // Method 2 - Explicitly set its keys
+        todos.push(TodoItem({ text: _text, completed: false }));
+
+        // Method 3 - Initialize an empty struct, then set individual properties
+        TodoItem memory todo;
+        todo.text = _text;
+        todo.completed = false;
+        todos.push(todo);
     }
 
-    // Pass a uint for input to update the value
-    function set(Status _status) public {
-        status = _status;
+    // Update a struct value
+    function update(uint _index, string memory _text) public {
+        todos[_index].text = _text;
     }
 
-    // Update value to a specific enum members
-    function cancel() public {
-        status = Status.Canceled; // Will set status = 4
+    // Update completed
+    function toggleCompleted(uint _index) public {
+        todos[_index].completed = !todos[_index].completed;
     }
 }
